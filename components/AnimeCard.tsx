@@ -1,4 +1,12 @@
 import Image from "next/image";
+import { MotionDiv } from "./common/Motion";
+
+const stagger = 0.25;
+
+const variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
 
 export interface AnimeProp {
   id: string;
@@ -17,20 +25,31 @@ interface Prop {
   index: number;
 }
 
-function AnimeCard({ anime }: Prop) {
+function AnimeCard({ anime, index }: Prop) {
   return (
-    <div className="max-w-sm rounded relative w-full">
-      <div className="relative w-full h-[37vh]">
+    <MotionDiv
+      variants={variants}
+      initial="hidden"
+      animate="visible"
+      transition={{
+        delay: index * stagger,
+        ease: "easeInOut",
+        duration: 0.5,
+      }}
+      viewport={{ amount: 0 }}
+      className=" rounded relative w-full "
+    >
+      <div className="relative  w-full h-[50vh] ">
         <Image
-          src={anime.image.original}
+          src={`https://shikimori.one${anime.image.original}`}
           alt={anime.name}
           fill
           className="rounded-xl"
         />
       </div>
-      <div className="py-4 flex flex-col gap-3">
+      <div className="py-4 flex flex-col gap-3 ">
         <div className="flex justify-between items-center gap-1">
-          <h2 className="font-bold text-white text-xl line-clamp-1 w-full">
+          <h2 className="font-bold text-white text-base uppercase tracking-widest line-clamp-1 w-full">
             {anime.name}
           </h2>
           <div className="py-1 px-2 bg-[#161921] rounded-sm">
@@ -48,7 +67,7 @@ function AnimeCard({ anime }: Prop) {
               height={20}
               className="object-contain"
             />
-            <p className="text-base text-white font-bold">
+            <p className="text-sm text-white font-bold">
               {anime.episodes || anime.episodes_aired}
             </p>
           </div>
@@ -60,11 +79,11 @@ function AnimeCard({ anime }: Prop) {
               height={18}
               className="object-contain"
             />
-            <p className="text-base font-bold text-[#FFAD49]">{anime.score}</p>
+            <p className="text-sm font-bold text-[#FFAD49]">{anime.score}</p>
           </div>
         </div>
       </div>
-    </div>
+    </MotionDiv>
   );
 }
 
